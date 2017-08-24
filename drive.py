@@ -55,7 +55,7 @@ def backward():
     pwmB_motor.ChangeDutyCycle(75)
     GPIO.output(in3_pin,True)
     GPIO.output(in4_pin,False)
-    
+
 while True:
     left_input = GPIO.input(left_sensor_pin)
     right_input = GPIO.input(right_sensor_pin)
