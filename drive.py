@@ -41,20 +41,21 @@ def stop():
     pwmB_motor.ChangeDutyCycle(0)    
 
 def forward():
-    pwmA_motor.ChangeDutyCycle(75) 
-    GPIO.output(in1_pin,True)
-    GPIO.output(in2_pin,False)
-    pwmB_motor.ChangeDutyCycle(75)
-    GPIO.output(in3_pin,True)
-    GPIO.output(in4_pin,False)
-
-def backward():
     pwmA_motor.ChangeDutyCycle(75)
     GPIO.output(in1_pin,False)
     GPIO.output(in2_pin,True)
     pwmB_motor.ChangeDutyCycle(75) 
     GPIO.output(in3_pin,False)
     GPIO.output(in4_pin,True)
+
+def backward():
+    pwmA_motor.ChangeDutyCycle(75) 
+    GPIO.output(in1_pin,True)
+    GPIO.output(in2_pin,False)
+    pwmB_motor.ChangeDutyCycle(75)
+    GPIO.output(in3_pin,True)
+    GPIO.output(in4_pin,False)
+    
 while True:
     left_input = GPIO.input(left_sensor_pin)
     right_input = GPIO.input(right_sensor_pin)
