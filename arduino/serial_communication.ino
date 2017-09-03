@@ -1,3 +1,5 @@
+//arduino source
+
 int sensorPin = A0;
 //int distance = 0;
 void setup() {

@@ -89,9 +89,11 @@ def ransac_vanishing_point_detection(lines, distance=50, iterations=100):
         x3, y3, x4, y4 = lines[i2]
 
         # Find the intersection point
-        x_intersect = ((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4))/((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4))
-        y_intersect = ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4))/((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4))
-
+        try:
+            x_intersect = ((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4))/((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4))
+            y_intersect = ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4))/((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4))
+        except :
+            pass
         if y_intersect < 80 or y_intersect > 300:
             continue
 
@@ -115,12 +117,12 @@ def ransac_vanishing_point_detection(lines, distance=50, iterations=100):
     return best_fit
 
 
-def LineDetecting():
-    image = cv2.imread('slope_test.jpg') # 이미지 읽기
+def LineDetecting(img1):
+    image = img1 # 이미지 읽기
 
     height, width = image.shape[:2] # 이미지 높이, 너비
-    print(height)
-    print(width)
+    #print(height)
+    #print(width)
 
     gray_img = grayscale(image) # 흑백이미지로 변환
         
@@ -128,7 +130,7 @@ def LineDetecting():
        
     canny_img = canny(blur_img, 70, 210) # Canny edge 알고리즘
 
-    vertices = np.array([[(50,height),(width/2-45, height/2+60), (width/2+65, height/2+60), (width-30,height)]], dtype=np.int32)
+    vertices = np.array([[(0,height),(width/2-100, height/2+80), (width/2+100, height/2+80), (width,height)]], dtype=np.int32)
     ROI_img = region_of_interest(canny_img, vertices) # ROI 설정
 
     line_arr = hough_lines(ROI_img, 1, 1 * np.pi/180, 30, 10, 20) # 허프 변환
@@ -138,8 +140,8 @@ def LineDetecting():
     slope_degree = (np.arctan2(line_arr[:,1] - line_arr[:,3], line_arr[:,0] - line_arr[:,2]) * 180) / np.pi
     #print(slope_degree)
     # 수평 기울기 제한
-    line_arr = line_arr[np.abs(slope_degree)<160]
-    slope_degree = slope_degree[np.abs(slope_degree)<160]
+    line_arr = line_arr[np.abs(slope_degree)<170]
+    slope_degree = slope_degree[np.abs(slope_degree)<170]
     #print(line_arr)
     #print(slope_degree)
     # 수직 기울기 제한
@@ -170,4 +172,3 @@ def LineDetecting():
 
     result = weighted_img(temp, image) # 원본 이미지에 검출된 선 overlap
     cv2.imshow('result',result) # 결과 이미지 출력
-    cv2.waitKey(0)

@@ -1,8 +1,11 @@
+"""drive source"""
 import RPi.GPIO as GPIO
 import time
 import servo_motor as SERVO
 import initial as INI
+import arduinoserial as AS
 
+"""Setting"""
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -28,6 +31,7 @@ GPIO.setup(servo_pwmpin, GPIO.OUT)
 GPIO.setup(left_sensor_pin, GPIO.IN)
 GPIO.setup(right_sensor_pin, GPIO.IN)
 
+"""motor speed control"""
 pwmA_motor = GPIO.PWM(pwmA_pin, 100)
 pwmA_motor.start(0)
 pwmB_motor = GPIO.PWM(pwmB_pin, 100)
@@ -36,10 +40,11 @@ servo_motor = GPIO.PWM(servo_pwmpin, 50)
 SERVO.servo_motor.start(4)
 before_left=1
 before_right=1
+"""motor stop"""
 def stop():
     pwmA_motor.ChangeDutyCycle(0)
     pwmB_motor.ChangeDutyCycle(0)    
-
+"""forward moving"""
 def forward():
     pwmA_motor.ChangeDutyCycle(75)
     GPIO.output(in1_pin,False)
@@ -48,6 +53,7 @@ def forward():
     GPIO.output(in3_pin,False)
     GPIO.output(in4_pin,True)
 
+"""backward moving"""
 def backward():
     pwmA_motor.ChangeDutyCycle(75) 
     GPIO.output(in1_pin,True)
@@ -56,9 +62,11 @@ def backward():
     GPIO.output(in3_pin,True)
     GPIO.output(in4_pin,False)
 
+"""main"""
 while True:
     left_input = GPIO.input(left_sensor_pin)
     right_input = GPIO.input(right_sensor_pin)
+    middle_input = AS.serial_control()
     if before_left != left_input or before_right != right_input:
         if left_input==0 and right_input==0:
             SERVO.forward_Drive()
@@ -72,7 +80,6 @@ while True:
     forward()
     before_left = left_input
     before_right = right_input
-    
 
 
     

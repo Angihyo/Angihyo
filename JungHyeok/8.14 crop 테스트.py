@@ -2,7 +2,7 @@ import cv2
 import numpy as np
  
 
-img = cv2.imread('sign2.jpg', cv2.IMREAD_COLOR)
+img = cv2.imread('sign32.jpg', cv2.IMREAD_COLOR)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 edges = cv2.Canny(gray,40,140)
 while(1):
