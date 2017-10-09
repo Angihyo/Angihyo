@@ -2,7 +2,7 @@ import serial
 """serialcontrol"""
 def serial_control():
     port = "/dev/ttyUSB0"
-    serialFromArduino = serial.Serial(port, 9600)
+    serialFromArduino = serial.Serial(port, 115200)
     serialFromArduino.flushInput()
     """arduino_data read"""
     while True:
@@ -10,3 +10,4 @@ def serial_control():
             input_s =serialFromArduino.readline()
             input = int(input_s)
             print(input)
+            return input
